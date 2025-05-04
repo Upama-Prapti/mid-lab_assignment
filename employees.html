@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee List</title>
+  <style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f9f9f9;
+  }
+  .container {
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  form {
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Employee List</h2>
+    <table border="1" id="employeeTable" style="width:100%">
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Date</th><th>Gender</th><th>Type</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>EMP001</td><td>John Doe</td><td>john@example.com</td><td>HR</td><td>2023-01-10</td><td>Male</td><td>Full-Time</td>
+          <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+        <tr>
+          <td>EMP002</td><td>Jane Smith</td><td>jane@example.com</td><td>Sales</td><td>2023-02-15</td><td>Female</td><td>Full-Time</td>
+          <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+        <tr>
+          <td>EMP003</td><td>Mike Lee</td><td>mike@example.com</td><td>IT</td><td>2023-03-12</td><td>Male</td><td>Full-Time</td>
+          <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+        <tr>
+          <td>EMP004</td><td>Sara Khan</td><td>sara@example.com</td><td>Marketing</td><td>2023-04-20</td><td>Female</td><td>Full-Time</td>
+          <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+        <tr>
+          <td>EMP005</td><td>Tom Brown</td><td>tom@example.com</td><td>IT</td><td>2023-05-25</td><td>Male</td><td>Full-Time</td>
+          <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="editSection"></div>
+  </div>
+  <script>
+    function deleteRow(btn) {
+      var row = btn.parentNode.parentNode;
+      row.remove();
+    }
+
+    function editRow(btn) {
+      var row = btn.parentNode.parentNode;
+      var cells = row.getElementsByTagName("td");
+      var editSection = document.getElementById("editSection");
+      editSection.innerHTML = `
+        <h3>Edit Employee</h3>
+        <input type="text" id="editId" value="${cells[0].innerText}"><br>
+        <input type="text" id="editName" value="${cells[1].innerText}"><br>
+        <input type="text" id="editEmail" value="${cells[2].innerText}"><br>
+        <input type="text" id="editDept" value="${cells[3].innerText}"><br>
+        <input type="date" id="editDate" value="${cells[4].innerText}"><br>
+        <input type="text" id="editGender" value="${cells[5].innerText}"><br>
+        <input type="text" id="editType" value="${cells[6].innerText}"><br><br>
+        <button onclick="saveEdit(this)">Save</button>
+      `;
+      editSection.dataset.rowIndex = row.rowIndex;
+    }
+
+    function saveEdit(btn) {
+      var idx = document.getElementById("editSection").dataset.rowIndex;
+      var table = document.getElementById("employeeTable");
+      var row = table.rows[idx];
+      row.cells[0].innerText = document.getElementById("editId").value;
+      row.cells[1].innerText = document.getElementById("editName").value;
+      row.cells[2].innerText = document.getElementById("editEmail").value;
+      row.cells[3].innerText = document.getElementById("editDept").value;
+      row.cells[4].innerText = document.getElementById("editDate").value;
+      row.cells[5].innerText = document.getElementById("editGender").value;
+      row.cells[6].innerText = document.getElementById("editType").value;
+      document.getElementById("editSection").innerHTML = "";
+    }
+  </script>
+</body>
+</html>

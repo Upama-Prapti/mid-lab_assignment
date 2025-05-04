@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register Employee</title>
+  <style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f9f9f9;
+  }
+  .container {
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  form {
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Register New Employee</h2>
+    <form id="employeeForm">
+      <label>Employee ID:</label><br>
+      <input type="text" id="empId"><br>
+      <label>Full Name:</label><br>
+      <input type="text" id="name"><br>
+      <label>Email:</label><br>
+      <input type="email" id="email"><br>
+      <label>Department:</label><br>
+      <select id="department">
+        <option value="">Select</option>
+        <option>HR</option>
+        <option>Sales</option>
+        <option>IT</option>
+        <option>Marketing</option>
+      </select><br>
+      <label>Joining Date:</label><br>
+      <input type="date" id="joiningDate"><br>
+      <label>Gender:</label><br>
+      <input type="radio" name="gender" value="Male"> Male
+      <input type="radio" name="gender" value="Female"> Female<br>
+      <label><input type="checkbox" id="fullTime"> Full-Time</label><br><br>
+      <button type="submit">Register</button>
+    </form>
+    <div id="output"></div>
+  </div>
+  <script>
+    document.getElementById("employeeForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var id = document.getElementById("empId").value;
+      var name = document.getElementById("name").value;
+      var email = document.getElementById("email").value;
+      var dept = document.getElementById("department").value;
+      var date = document.getElementById("joiningDate").value;
+      var genderElems = document.getElementsByName("gender");
+      var gender = "";
+      for (var g of genderElems) {
+        if (g.checked) gender = g.value;
+      }
+      var fullTime = document.getElementById("fullTime").checked ? "Full-Time" : "Part-Time";
+
+      var errors = [];
+      if (!/^EMP\d{3}$/.test(id)) errors.push("Invalid Employee ID");
+      if (!/^[A-Za-z ]+$/.test(name)) errors.push("Invalid Name");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errors.push("Invalid Email");
+      if (!dept) errors.push("Select Department");
+      if (!date) errors.push("Select Joining Date");
+      if (!gender) errors.push("Select Gender");
+
+      var output = document.getElementById("output");
+      if (errors.length) {
+        output.innerHTML = "<p style='color:red'>" + errors.join("<br>") + "</p>";
+      } else {
+        output.innerHTML = "<h3>Employee Registered:</h3><p>ID: " + id + "<br>Name: " + name +
+          "<br>Email: " + email + "<br>Department: " + dept + "<br>Date: " + date +
+          "<br>Gender: " + gender + "<br>Type: " + fullTime + "</p>";
+      }
+    });
+  </script>
+</body>
+</html>

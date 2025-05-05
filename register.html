@@ -5,35 +5,46 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #eef;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .box {
-      background-color: white;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px gray;
-      width: 300px;
+      background-color: #f9f9f9;
     }
 
-    .box h2 {
+    .form-box {
+      max-width: 400px;
+      margin: auto;
+      padding: 15px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+    }
+
+    h2 {
       text-align: center;
     }
 
-    .box label {
+    label {
       display: block;
       margin-top: 10px;
     }
 
-    .box input, .box select {
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select {
       width: 100%;
       padding: 5px;
       margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 8px 12px;
+      width: 100%;
+      cursor: pointer;
     }
 
     #output {
@@ -43,7 +54,7 @@
 </head>
 <body>
 
-  <div class="box">
+  <div class="form-box">
     <h2>Register Employee</h2>
     <form id="form">
       <label>Employee ID</label>
@@ -71,9 +82,11 @@
       <input type="radio" name="gender" value="Male"> Male
       <input type="radio" name="gender" value="Female"> Female
 
-      <label><input type="checkbox" id="type"> Full-Time</label>
+      <label>Type</label>
+      <input type="radio" name="type" value="Full-Time"> Full-Time
+      <input type="radio" name="type" value="Part-Time"> Part-Time
 
-      <button type="submit" style="margin-top: 10px;">Register</button>
+      <button type="submit">Register</button>
     </form>
 
     <div id="output"></div>
@@ -83,26 +96,32 @@
     document.getElementById("form").onsubmit = function(e) {
       e.preventDefault();
 
-      var id = document.getElementById("empId").value;
-      var name = document.getElementById("name").value;
-      var email = document.getElementById("email").value;
+      var id = document.getElementById("empId").value.trim();
+      var name = document.getElementById("name").value.trim();
+      var email = document.getElementById("email").value.trim();
       var dept = document.getElementById("dept").value;
       var date = document.getElementById("date").value;
-      var type = document.getElementById("type").checked ? "Full-Time" : "Part-Time";
 
       var gender = "";
-      var radios = document.getElementsByName("gender");
-      for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) {
-          gender = radios[i].value;
+      var genderRadios = document.getElementsByName("gender");
+      for (var i = 0; i < genderRadios.length; i++) {
+        if (genderRadios[i].checked) {
+          gender = genderRadios[i].value;
+        }
+      }
+
+      var type = "";
+      var typeRadios = document.getElementsByName("type");
+      for (var i = 0; i < typeRadios.length; i++) {
+        if (typeRadios[i].checked) {
+          type = typeRadios[i].value;
         }
       }
 
       var errors = [];
 
- 
       if (!(id.startsWith("EMP") && id.length === 6 && !isNaN(id.slice(3)))) {
-        errors.push("Employee ID must start with 'EMP' and have 3 numbers, like EMP001");
+        errors.push("Employee ID must start with 'EMP' and have 3 digits (e.g., EMP001)");
       }
 
       for (var i = 0; i < name.length; i++) {
@@ -112,7 +131,8 @@
           break;
         }
       }
-      if (name.trim() === "") {
+
+      if (name === "") {
         errors.push("Name cannot be empty");
       }
 
@@ -123,8 +143,10 @@
       if (dept === "") errors.push("Please select a department");
       if (date === "") errors.push("Please select a joining date");
       if (gender === "") errors.push("Please select gender");
+      if (type === "") errors.push("Please select employee type (Full-Time/Part-Time)");
 
       var output = document.getElementById("output");
+
       if (errors.length > 0) {
         output.style.color = "red";
         output.innerHTML = errors.join("<br>");

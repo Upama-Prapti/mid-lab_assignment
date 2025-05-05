@@ -1,92 +1,137 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Employee List</title>
+  <title>Simple Employee List</title>
   <style>
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    background-color: #f9f9f9;
-  }
-  .container {
-    max-width: 600px;
-    width: 100%;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  form {
-    text-align: left;
-  }
-</style>
+    body {
+      font-family: Arial;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 800px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    button {
+      padding: 5px 10px;
+      margin: 2px;
+    }
+
+    #editSection {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
+
   <div class="container">
     <h2>Employee List</h2>
-    <table border="1" id="employeeTable" style="width:100%">
+
+    <table id="employeeTable">
       <thead>
         <tr>
-          <th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Date</th><th>Gender</th><th>Type</th><th>Actions</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Department</th>
+          <th>Date</th>
+          <th>Gender</th>
+          <th>Type</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>EMP001</td><td>John Doe</td><td>john@example.com</td><td>HR</td><td>2023-01-10</td><td>Male</td><td>Full-Time</td>
+          <td>EMP001</td><td>Upama</td><td>Upama@example.com</td><td>HR</td><td>2023-01-10</td><td>Male</td><td>Full-Time</td>
           <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
         </tr>
         <tr>
-          <td>EMP002</td><td>Jane Smith</td><td>jane@example.com</td><td>Sales</td><td>2023-02-15</td><td>Female</td><td>Full-Time</td>
+          <td>EMP002</td><td>Prapti</td><td>Prapti@example.com</td><td>Sales</td><td>2023-02-15</td><td>Female</td><td>Full-Time</td>
           <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
         </tr>
         <tr>
-          <td>EMP003</td><td>Mike Lee</td><td>mike@example.com</td><td>IT</td><td>2023-03-12</td><td>Male</td><td>Full-Time</td>
+          <td>EMP003</td><td>Bishal</td><td>Bishal@example.com</td><td>IT</td><td>2023-03-12</td><td>Male</td><td>Full-Time</td>
           <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
         </tr>
         <tr>
-          <td>EMP004</td><td>Sara Khan</td><td>sara@example.com</td><td>Marketing</td><td>2023-04-20</td><td>Female</td><td>Full-Time</td>
+          <td>EMP004</td><td>airin</td><td>airin@example.com</td><td>Marketing</td><td>2023-04-20</td><td>Female</td><td>Full-Time</td>
           <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
         </tr>
         <tr>
-          <td>EMP005</td><td>Tom Brown</td><td>tom@example.com</td><td>IT</td><td>2023-05-25</td><td>Male</td><td>Full-Time</td>
+          <td>EMP005</td><td>airin jnr</td><td>airin jnr@example.com</td><td>IT</td><td>2023-05-25</td><td>Male</td><td>Full-Time</td>
           <td><button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button></td>
         </tr>
       </tbody>
     </table>
+
     <div id="editSection"></div>
   </div>
+
   <script>
-    function deleteRow(btn) {
-      var row = btn.parentNode.parentNode;
+    // row delete 
+    function deleteRow(button) {
+      let row = button.parentNode.parentNode;
       row.remove();
     }
 
-    function editRow(btn) {
-      var row = btn.parentNode.parentNode;
-      var cells = row.getElementsByTagName("td");
-      var editSection = document.getElementById("editSection");
-      editSection.innerHTML = `
+    // row edit
+    function editRow(button) {
+      let row = button.parentNode.parentNode;
+      let cells = row.getElementsByTagName("td");
+
+      // edit section current fill
+      document.getElementById("editSection").innerHTML = `
         <h3>Edit Employee</h3>
+        <label>ID:</label><br>
         <input type="text" id="editId" value="${cells[0].innerText}"><br>
+        <label>Name:</label><br>
         <input type="text" id="editName" value="${cells[1].innerText}"><br>
+        <label>Email:</label><br>
         <input type="text" id="editEmail" value="${cells[2].innerText}"><br>
+        <label>Department:</label><br>
         <input type="text" id="editDept" value="${cells[3].innerText}"><br>
+        <label>Date:</label><br>
         <input type="date" id="editDate" value="${cells[4].innerText}"><br>
+        <label>Gender:</label><br>
         <input type="text" id="editGender" value="${cells[5].innerText}"><br>
+        <label>Type:</label><br>
         <input type="text" id="editType" value="${cells[6].innerText}"><br><br>
-        <button onclick="saveEdit(this)">Save</button>
+        <button onclick="saveEdit(${row.rowIndex})">Save</button>
       `;
-      editSection.dataset.rowIndex = row.rowIndex;
     }
 
-    function saveEdit(btn) {
-      var idx = document.getElementById("editSection").dataset.rowIndex;
-      var table = document.getElementById("employeeTable");
-      var row = table.rows[idx];
+    // Function to save edited data
+    function saveEdit(index) {
+      let table = document.getElementById("employeeTable");
+      let row = table.rows[index];
+
       row.cells[0].innerText = document.getElementById("editId").value;
       row.cells[1].innerText = document.getElementById("editName").value;
       row.cells[2].innerText = document.getElementById("editEmail").value;
@@ -94,6 +139,8 @@
       row.cells[4].innerText = document.getElementById("editDate").value;
       row.cells[5].innerText = document.getElementById("editGender").value;
       row.cells[6].innerText = document.getElementById("editType").value;
+
+      // Clear the edit section
       document.getElementById("editSection").innerHTML = "";
     }
   </script>

@@ -3,88 +3,145 @@
 <head>
   <title>Register Employee</title>
   <style>
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    background-color: #f9f9f9;
-  }
-  .container {
-    max-width: 600px;
-    width: 100%;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  form {
-    text-align: left;
-  }
-</style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px gray;
+      width: 300px;
+    }
+
+    .box h2 {
+      text-align: center;
+    }
+
+    .box label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .box input, .box select {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+    }
+
+    #output {
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Register New Employee</h2>
-    <form id="employeeForm">
-      <label>Employee ID:</label><br>
-      <input type="text" id="empId"><br>
-      <label>Full Name:</label><br>
-      <input type="text" id="name"><br>
-      <label>Email:</label><br>
-      <input type="email" id="email"><br>
-      <label>Department:</label><br>
-      <select id="department">
+
+  <div class="box">
+    <h2>Register Employee</h2>
+    <form id="form">
+      <label>Employee ID</label>
+      <input type="text" id="empId">
+
+      <label>Full Name</label>
+      <input type="text" id="name">
+
+      <label>Email</label>
+      <input type="text" id="email">
+
+      <label>Department</label>
+      <select id="dept">
         <option value="">Select</option>
         <option>HR</option>
         <option>Sales</option>
         <option>IT</option>
         <option>Marketing</option>
-      </select><br>
-      <label>Joining Date:</label><br>
-      <input type="date" id="joiningDate"><br>
-      <label>Gender:</label><br>
+      </select>
+
+      <label>Joining Date</label>
+      <input type="date" id="date">
+
+      <label>Gender</label>
       <input type="radio" name="gender" value="Male"> Male
-      <input type="radio" name="gender" value="Female"> Female<br>
-      <label><input type="checkbox" id="fullTime"> Full-Time</label><br><br>
-      <button type="submit">Register</button>
+      <input type="radio" name="gender" value="Female"> Female
+
+      <label><input type="checkbox" id="type"> Full-Time</label>
+
+      <button type="submit" style="margin-top: 10px;">Register</button>
     </form>
+
     <div id="output"></div>
   </div>
+
   <script>
-    document.getElementById("employeeForm").addEventListener("submit", function(e) {
+    document.getElementById("form").onsubmit = function(e) {
       e.preventDefault();
+
       var id = document.getElementById("empId").value;
       var name = document.getElementById("name").value;
       var email = document.getElementById("email").value;
-      var dept = document.getElementById("department").value;
-      var date = document.getElementById("joiningDate").value;
-      var genderElems = document.getElementsByName("gender");
+      var dept = document.getElementById("dept").value;
+      var date = document.getElementById("date").value;
+      var type = document.getElementById("type").checked ? "Full-Time" : "Part-Time";
+
       var gender = "";
-      for (var g of genderElems) {
-        if (g.checked) gender = g.value;
+      var radios = document.getElementsByName("gender");
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+          gender = radios[i].value;
+        }
       }
-      var fullTime = document.getElementById("fullTime").checked ? "Full-Time" : "Part-Time";
 
       var errors = [];
-      if (!/^EMP\d{3}$/.test(id)) errors.push("Invalid Employee ID");
-      if (!/^[A-Za-z ]+$/.test(name)) errors.push("Invalid Name");
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errors.push("Invalid Email");
-      if (!dept) errors.push("Select Department");
-      if (!date) errors.push("Select Joining Date");
-      if (!gender) errors.push("Select Gender");
+
+ 
+      if (!(id.startsWith("EMP") && id.length === 6 && !isNaN(id.slice(3)))) {
+        errors.push("Employee ID must start with 'EMP' and have 3 numbers, like EMP001");
+      }
+
+      for (var i = 0; i < name.length; i++) {
+        var ch = name[i];
+        if (!((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch === ' ')) {
+          errors.push("Name can only contain letters and spaces");
+          break;
+        }
+      }
+      if (name.trim() === "") {
+        errors.push("Name cannot be empty");
+      }
+
+      if (email.indexOf("@") === -1 || email.indexOf(".") === -1) {
+        errors.push("Email must contain '@' and '.'");
+      }
+
+      if (dept === "") errors.push("Please select a department");
+      if (date === "") errors.push("Please select a joining date");
+      if (gender === "") errors.push("Please select gender");
 
       var output = document.getElementById("output");
-      if (errors.length) {
-        output.innerHTML = "<p style='color:red'>" + errors.join("<br>") + "</p>";
+      if (errors.length > 0) {
+        output.style.color = "red";
+        output.innerHTML = errors.join("<br>");
       } else {
-        output.innerHTML = "<h3>Employee Registered:</h3><p>ID: " + id + "<br>Name: " + name +
-          "<br>Email: " + email + "<br>Department: " + dept + "<br>Date: " + date +
-          "<br>Gender: " + gender + "<br>Type: " + fullTime + "</p>";
+        output.style.color = "green";
+        output.innerHTML =
+          "Employee Registered:<br>" +
+          "ID: " + id + "<br>" +
+          "Name: " + name + "<br>" +
+          "Email: " + email + "<br>" +
+          "Department: " + dept + "<br>" +
+          "Joining Date: " + date + "<br>" +
+          "Gender: " + gender + "<br>" +
+          "Type: " + type;
       }
-    });
+    }
   </script>
+
 </body>
 </html>
